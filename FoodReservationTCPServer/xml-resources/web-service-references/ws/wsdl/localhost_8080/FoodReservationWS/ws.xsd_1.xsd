@@ -1,0 +1,378 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.4.0 (wsit240-7e98ff4; 2017-08-03T21:19:54+0200) JAXWS-RI/2.3.0 JAXWS-API/2.3.0 JAXB-RI/2.3.0 JAXB-API/2.3.0 svn-revision#unknown. --><xs:schema xmlns:tns="http://foodreservation/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://foodreservation/">
+
+<xs:element name="addMenu" type="tns:addMenu"/>
+
+<xs:element name="addMenuResponse" type="tns:addMenuResponse"/>
+
+<xs:element name="addOrderItem" type="tns:addOrderItem"/>
+
+<xs:element name="addOrderItemResponse" type="tns:addOrderItemResponse"/>
+
+<xs:element name="cancelReservation" type="tns:cancelReservation"/>
+
+<xs:element name="cancelReservationResponse" type="tns:cancelReservationResponse"/>
+
+<xs:element name="confirmReservation" type="tns:confirmReservation"/>
+
+<xs:element name="confirmReservationResponse" type="tns:confirmReservationResponse"/>
+
+<xs:element name="deleteMenu" type="tns:deleteMenu"/>
+
+<xs:element name="deleteMenuResponse" type="tns:deleteMenuResponse"/>
+
+<xs:element name="deleteOrderItem" type="tns:deleteOrderItem"/>
+
+<xs:element name="deleteOrderItemResponse" type="tns:deleteOrderItemResponse"/>
+
+<xs:element name="findAvailableTable" type="tns:findAvailableTable"/>
+
+<xs:element name="findAvailableTableResponse" type="tns:findAvailableTableResponse"/>
+
+<xs:element name="getAllMenuList" type="tns:getAllMenuList"/>
+
+<xs:element name="getAllMenuListResponse" type="tns:getAllMenuListResponse"/>
+
+<xs:element name="getAllReservations" type="tns:getAllReservations"/>
+
+<xs:element name="getAllReservationsResponse" type="tns:getAllReservationsResponse"/>
+
+<xs:element name="getMenuList" type="tns:getMenuList"/>
+
+<xs:element name="getMenuListResponse" type="tns:getMenuListResponse"/>
+
+<xs:element name="getOrderByReservation" type="tns:getOrderByReservation"/>
+
+<xs:element name="getOrderByReservationResponse" type="tns:getOrderByReservationResponse"/>
+
+<xs:element name="getReservationHistory" type="tns:getReservationHistory"/>
+
+<xs:element name="getReservationHistoryResponse" type="tns:getReservationHistoryResponse"/>
+
+<xs:element name="getTableList" type="tns:getTableList"/>
+
+<xs:element name="getTableListResponse" type="tns:getTableListResponse"/>
+
+<xs:element name="getUserIdByUsername" type="tns:getUserIdByUsername"/>
+
+<xs:element name="getUserIdByUsernameResponse" type="tns:getUserIdByUsernameResponse"/>
+
+<xs:element name="getUserList" type="tns:getUserList"/>
+
+<xs:element name="getUserListResponse" type="tns:getUserListResponse"/>
+
+<xs:element name="getUserRole" type="tns:getUserRole"/>
+
+<xs:element name="getUserRoleResponse" type="tns:getUserRoleResponse"/>
+
+<xs:element name="login" type="tns:login"/>
+
+<xs:element name="loginResponse" type="tns:loginResponse"/>
+
+<xs:element name="makeReservation" type="tns:makeReservation"/>
+
+<xs:element name="makeReservationResponse" type="tns:makeReservationResponse"/>
+
+<xs:element name="register" type="tns:register"/>
+
+<xs:element name="registerResponse" type="tns:registerResponse"/>
+
+<xs:element name="updateMenu" type="tns:updateMenu"/>
+
+<xs:element name="updateMenuResponse" type="tns:updateMenuResponse"/>
+
+<xs:element name="updateOrderStatus" type="tns:updateOrderStatus"/>
+
+<xs:element name="updateOrderStatusResponse" type="tns:updateOrderStatusResponse"/>
+
+<xs:element name="updateProfile" type="tns:updateProfile"/>
+
+<xs:element name="updateProfileResponse" type="tns:updateProfileResponse"/>
+
+<xs:element name="updateTableStatus" type="tns:updateTableStatus"/>
+
+<xs:element name="updateTableStatusResponse" type="tns:updateTableStatusResponse"/>
+
+<xs:complexType name="updateProfile">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+<xs:element name="arg2" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateProfileResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addMenu">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+<xs:element name="arg2" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addMenuResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserRole">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserRoleResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteMenu">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteMenuResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateOrderStatus">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateOrderStatusResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="login">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="loginResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getAllReservations">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getAllReservationsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateTableStatus">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateTableStatusResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserList">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getUserListResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addOrderItem">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+<xs:element name="arg1" type="xs:int"/>
+<xs:element name="arg2" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addOrderItemResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getMenuList">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getMenuListResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteOrderItem">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteOrderItemResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getTableList">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getTableListResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cancelReservation">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cancelReservationResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateMenu">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+<xs:element name="arg2" type="xs:string" minOccurs="0"/>
+<xs:element name="arg3" type="xs:double"/>
+<xs:element name="arg4" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="updateMenuResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="makeReservation">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+<xs:element name="arg1" type="xs:int"/>
+<xs:element name="arg2" type="xs:string" minOccurs="0"/>
+<xs:element name="arg3" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="makeReservationResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getReservationHistory">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getReservationHistoryResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="confirmReservation">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="confirmReservationResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getOrderByReservation">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getOrderByReservationResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserIdByUsername">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserIdByUsernameResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="register">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"/>
+<xs:element name="arg1" type="xs:string" minOccurs="0"/>
+<xs:element name="arg2" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="registerResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findAvailableTable">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="findAvailableTableResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getAllMenuList">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getAllMenuListResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

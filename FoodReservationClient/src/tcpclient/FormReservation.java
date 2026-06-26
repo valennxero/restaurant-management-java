@@ -4,17 +4,54 @@
  */
 package tcpclient;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Jevon
  */
 public class FormReservation extends javax.swing.JFrame {
 
+    private int currentReservationId = -1;
+
     /**
      * Creates new form FormReservation
      */
     public FormReservation() {
         initComponents();
+        setTitle("Food Reservation - Buat Reservasi");
+        setLocationRelativeTo(null);
+        txtTanggal.setText(java.time.LocalDate.now().toString());
+        txtJam.setText("12:00:00");
+        spnTamu.setValue(2);
+        spnJumlah.setValue(1);
+        btnAddItem.setEnabled(false);
+        lblTotal.setText("Total: Rp 0");
+        tblMenu.setVisible(false);
+        tblOrder.setVisible(false);
+        loadMenuToTable();
+    }
+
+    private void loadMenuToTable() {
+        DefaultTableModel model = (DefaultTableModel) tblMenu.getModel();
+        model.setRowCount(0);
+
+        String response = TCPClient.sendCommand("GET_MENU");
+        if (response == null || response.contains("KOSONG")) {
+            return;
+        }
+
+        String[] parts = response.split("~");
+        for (int i = 1; i < parts.length; i++) {
+            String[] cols = parts[i].split("\\|");
+            //format = id|nama|kategori|harga
+            if (cols.length >= 4) {
+                model.addRow(new Object[]{
+                    cols[0], cols[1], cols[2], "Rp " + cols[3]
+                });
+            }
+        }
     }
 
     /**
@@ -26,21 +63,289 @@ public class FormReservation extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtJam = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtTanggal = new javax.swing.JTextField();
+        spnTamu = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblMenu = new javax.swing.JTable();
+        btnAddItem = new javax.swing.JButton();
+        spnJumlah = new javax.swing.JSpinner();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblOrder = new javax.swing.JTable();
+        btnReserve = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
+        lblTotal = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Reservation Here");
+
+        jLabel2.setText("Masukkan Tanggal Reservasi : ");
+
+        txtJam.setText("(Format: HH-mm-ss)");
+
+        jLabel3.setText("Jumlah Item :");
+
+        txtTanggal.setText("(Format: yyyy-MM-dd)");
+
+        jLabel4.setText("Masukkan Jam Reservasi : ");
+
+        tblMenu.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nama", "Kategori", "Harga"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblMenu);
+
+        btnAddItem.setText("Tambah Ke Keranjang");
+        btnAddItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddItemActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Jumlah Tamu :");
+
+        jLabel6.setText("Silahkan Pilih Menu Untuk ditambahkan ke Orderan");
+
+        tblOrder.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nama Menu", "Jumlah", "Harga", "Subtotal", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblOrder);
+
+        btnReserve.setText("Buat Reservasi");
+        btnReserve.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReserveActionPerformed(evt);
+            }
+        });
+
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        lblTotal.setText("jLabel7");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(132, 132, 132)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtJam, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(spnTamu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(42, 42, 42)
+                                        .addComponent(btnReserve))))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 21, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnBack)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(160, 160, 160))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spnJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAddItem))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtJam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(spnTamu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(btnReserve))
+                .addGap(19, 19, 19)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddItem)
+                    .addComponent(spnJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBack)
+                    .addComponent(lblTotal))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnReserveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReserveActionPerformed
+        // TODO add your handling code here:
+        String date = txtTanggal.getText().trim();
+        String time = txtJam.getText().trim();
+        String guests = spnTamu.getValue().toString();
+
+        if (date.isEmpty() || time.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tanggal dan jam harus diisi!");
+            return;
+        }
+
+        String command = "MAKE_RESERVATION~" + TCPClient.loggedUser
+                + "~" + guests + "~" + date + "~" + time;
+        String response = TCPClient.sendCommand(command);
+
+        if (response != null && response.startsWith("SUCCESS")) {
+            String[] parts = response.split("~");
+            currentReservationId = Integer.parseInt(parts[1]);
+
+            JOptionPane.showMessageDialog(this,
+                    "Reservasi berhasil dibuat!\nID: " + currentReservationId
+                    + "\nSekarang pilih menu yang ingin dipesan.");
+
+            btnReserve.setEnabled(false);
+            btnAddItem.setEnabled(true);
+
+            tblMenu.setVisible(true);
+            tblOrder.setVisible(true);
+        } else {
+            String pesan = "Gagal membuat reservasi!";
+            if (response != null && response.split("~").length > 1) {
+                pesan = response.split("~")[1];
+            }
+            JOptionPane.showMessageDialog(this, pesan, "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnReserveActionPerformed
+    private void refreshOrderTable() {
+        DefaultTableModel model = (DefaultTableModel) tblOrder.getModel();
+        model.setRowCount(0);
+
+        String response = TCPClient.sendCommand("GET_ORDER~" + currentReservationId);
+        if (response == null || response.contains("KOSONG")) {
+            return;
+        }
+
+        String[] parts = response.split("~");
+        double total = 0;
+
+        for (int i = 1; i < parts.length; i++) {
+            String[] cols = parts[i].split("\\|");
+            //format = id|namaMenu|quantity|harga|status
+            if (cols.length >= 5) {
+                double harga = Double.parseDouble(cols[3]);
+                int qty = Integer.parseInt(cols[2]);
+                double subtotal = harga * qty;
+                total += subtotal;
+
+                model.addRow(new Object[]{
+                    cols[1], //nama menu
+                    cols[2], //quantity
+                    "Rp " + cols[3], // harga satuan
+                    "Rp " + subtotal, // subtotal
+                    cols[4] // status
+                });
+            }
+        }
+        lblTotal.setText("Total: Rp " + total);
+    }
+
+    private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
+        // TODO add your handling code here:
+        if (currentReservationId < 0) {
+            JOptionPane.showMessageDialog(this, "Buat reservasi dulu!");
+            return;
+        }
+
+        int row = tblMenu.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih menu yang ingin dipesan!");
+            return;
+        }
+
+        String menuId = tblMenu.getModel().getValueAt(row, 0).toString();
+        String qty = spnJumlah.getValue().toString();
+        String response = TCPClient.sendCommand(
+                "ADD_ORDER~" + currentReservationId + "~" + menuId + "~" + qty);
+
+        if (response != null && response.equals("SUCCESS")) {
+            refreshOrderTable();
+        } else {
+            JOptionPane.showMessageDialog(this, "Gagal tambah pesanan!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnAddItemActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +383,23 @@ public class FormReservation extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddItem;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnReserve;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblTotal;
+    private javax.swing.JSpinner spnJumlah;
+    private javax.swing.JSpinner spnTamu;
+    private javax.swing.JTable tblMenu;
+    private javax.swing.JTable tblOrder;
+    private javax.swing.JTextField txtJam;
+    private javax.swing.JTextField txtTanggal;
     // End of variables declaration//GEN-END:variables
 }

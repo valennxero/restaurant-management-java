@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FormHistory extends javax.swing.JFrame {
 
-    private javax.swing.table.DefaultTableModel modelAsli;
+    private java.util.List<String[]> dataAsli = new java.util.ArrayList<>();
 
     /**
      * Creates new form FormHistory
@@ -34,6 +34,7 @@ public class FormHistory extends javax.swing.JFrame {
     private void refreshHistory() {
         DefaultTableModel model = (DefaultTableModel) tblHistory.getModel();
         model.setRowCount(0);
+        dataAsli.clear();
 
         String response;
         if (TCPClient.loggedRole.equals("admin")) {
@@ -51,17 +52,14 @@ public class FormHistory extends javax.swing.JFrame {
             String[] cols = parts[i].split("\\|");
 
             if (TCPClient.loggedRole.equals("admin") && cols.length >= 7) {
-                // Format admin: id|username|tableName|date|time|guestCount|status (7 field)
-                // Buang index 1 (username) supaya jadi 6 kolom: id|meja|tgl|jam|tamu|status
-                Object[] rowData = {cols[0], cols[2], cols[3], cols[4], cols[5], cols[6]};
+                String[] rowData = {cols[0], cols[2], cols[3], cols[4], cols[5], cols[6]};
                 model.addRow(rowData);
+                dataAsli.add(rowData);
             } else if (cols.length >= 6) {
-                // Format customer: id|tableName|date|time|guestCount|status (6 field)
                 model.addRow(cols);
+                dataAsli.add(cols);
             }
         }
-        // Simpan salinan untuk filter
-        modelAsli = model;
     }
 
     /**
@@ -325,32 +323,24 @@ public class FormHistory extends javax.swing.JFrame {
         String sampai = txtSampaiTgl.getText().trim();
 
         if (dari.isEmpty() || sampai.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Isi tanggal awal dan tanggal akhir!");
+            JOptionPane.showMessageDialog(this, "Isi tanggal awal dan tanggal akhir!");
             return;
         }
 
-        DefaultTableModel modelFilter = (DefaultTableModel) tblHistory.getModel();
-        modelFilter.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) tblHistory.getModel();
+        model.setRowCount(0);
 
-        int tglCol = TCPClient.loggedRole.equals("admin") ? 3 : 2;
+        int tglCol = 2;
 
-        for (int i = 0; i < modelAsli.getRowCount(); i++) {
-            String tgl = modelAsli.getValueAt(i, tglCol).toString();
-            // Bandingkan string tanggal (format yyyy-MM-dd bisa dibandingkan langsung)
+        for (String[] cols : dataAsli) {
+            String tgl = cols[tglCol];
             if (tgl.compareTo(dari) >= 0 && tgl.compareTo(sampai) <= 0) {
-                int colCount = modelAsli.getColumnCount();
-                Object[] rowData = new Object[colCount];
-                for (int j = 0; j < colCount; j++) {
-                    rowData[j] = modelAsli.getValueAt(i, j);
-                }
-                modelFilter.addRow(rowData);
+                model.addRow(cols);
             }
         }
 
-        if (modelFilter.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Tidak ada reservasi pada periode tersebut.");
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Tidak ada reservasi pada periode tersebut.");
         }
 
     }//GEN-LAST:event_btnFilterActionPerformed

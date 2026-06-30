@@ -13,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FormMenu extends javax.swing.JFrame {
 
+    private java.util.List<String[]> dataAsli = new java.util.ArrayList<>();
+
     /**
      * Creates new form FormMenu
      */
@@ -22,9 +24,10 @@ public class FormMenu extends javax.swing.JFrame {
         setLocationRelativeTo(null);
 
         //admin bisa tambah hapus menu
-        if (TCPClient.loggedRole.equals("admin")) {
-            btnTambah.setVisible(true);
-            btnHapus.setVisible(true);
+        if (!TCPClient.loggedRole.equals("admin")) {
+            btnTambah.setVisible(false);
+            btnHapus.setVisible(false);
+            btnEdit.setVisible(false);
         }
 
         refreshTable();
@@ -33,6 +36,7 @@ public class FormMenu extends javax.swing.JFrame {
     private void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) tblMenu.getModel();
         model.setRowCount(0);
+        dataAsli.clear();
 
         String cmd;
         if (TCPClient.loggedRole.equals("admin")) {
@@ -49,14 +53,11 @@ public class FormMenu extends javax.swing.JFrame {
         String[] parts = response.split("~");
         for (int i = 1; i < parts.length; i++) {
             String[] cols = parts[i].split("\\|");
-
             if (cols.length >= 4) {
                 model.addRow(new Object[]{
-                    cols[0], //id
-                    cols[1],//nama menu
-                    cols[2],//kategori
-                    "Rp " + cols[3]//harga
+                    cols[0], cols[1], cols[2], "Rp " + cols[3]
                 });
+                dataAsli.add(cols);
             }
         }
     }
@@ -77,6 +78,10 @@ public class FormMenu extends javax.swing.JFrame {
         btnRefresh = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,47 +140,88 @@ public class FormMenu extends javax.swing.JFrame {
             }
         });
 
+        btnEdit.setText("Edit Menu");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
+        txtSearch.setText("Search Menu");
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(202, 202, 202)
+                .addGap(206, 206, 206)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(btnTambah)
-                .addGap(30, 30, 30)
-                .addComponent(btnHapus)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRefresh)
-                .addGap(36, 36, 36))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnBack))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnBack))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnReset)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnSearch)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(15, 15, 15))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)))
-                .addGap(15, 15, 15))
+                        .addGap(9, 9, 9)
+                        .addComponent(btnTambah)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnHapus)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEdit)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRefresh)
+                        .addGap(36, 36, 36))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addGap(14, 14, 14)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(btnReset)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambah)
                     .addComponent(btnRefresh)
-                    .addComponent(btnHapus))
-                .addGap(18, 18, 18)
+                    .addComponent(btnHapus)
+                    .addComponent(btnEdit))
+                .addGap(24, 24, 24)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnBack)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -249,6 +295,91 @@ public class FormMenu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        String keyword = txtSearch.getText().trim().toLowerCase();
+        if (keyword.isEmpty()) {
+            refreshTable();
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tblMenu.getModel();
+        model.setRowCount(0);
+
+        for (String[] cols : dataAsli) {
+            String nama = cols[1].toLowerCase();
+            String kategori = cols[2].toLowerCase();
+            if (nama.contains(keyword) || kategori.contains(keyword)) {
+                model.addRow(new Object[]{cols[0], cols[1], cols[2], "Rp " + cols[3]});
+            }
+        }
+
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Menu dengan keyword '" + keyword + "' tidak ditemukan.");
+        }
+
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        txtSearch.setText("");
+        refreshTable();
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        // TODO add your handling code here:
+        int row = tblMenu.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih menu yang akan diedit!");
+            return;
+        }
+
+        String id = tblMenu.getModel().getValueAt(row, 0).toString();
+        String namaSaat = tblMenu.getModel().getValueAt(row, 1).toString();
+        String katSaat = tblMenu.getModel().getValueAt(row, 2).toString();
+        String hrgSaat = tblMenu.getModel().getValueAt(row, 3)
+                .toString().replace("Rp ", "").trim();
+
+        String namaBaru = JOptionPane.showInputDialog(this, "Nama menu:", namaSaat);
+        if (namaBaru == null || namaBaru.trim().isEmpty()) {
+            return;
+        }
+
+        String katBaru = JOptionPane.showInputDialog(this, "Kategori:", katSaat);
+        if (katBaru == null || katBaru.trim().isEmpty()) {
+            return;
+        }
+
+        String hrgBaru = JOptionPane.showInputDialog(this, "Harga:", hrgSaat);
+        if (hrgBaru == null || hrgBaru.trim().isEmpty()) {
+            return;
+        }
+
+        // Tanya status available
+        String[] pilihanAvail = {"1 (Tersedia)", "0 (Tidak Tersedia)"};
+        String availPilih = (String) JOptionPane.showInputDialog(
+                this, "Status:", "Edit Menu",
+                JOptionPane.QUESTION_MESSAGE, null, pilihanAvail, pilihanAvail[0]);
+        if (availPilih == null) {
+            return;
+        }
+        String avail = availPilih.startsWith("1") ? "1" : "0";
+
+        String response = TCPClient.sendCommand(
+                "UPDATE_MENU~" + id + "~" + namaBaru.trim()
+                + "~" + katBaru.trim() + "~" + hrgBaru.trim() + "~" + avail);
+
+        if (response != null && response.equals("SUCCESS")) {
+            JOptionPane.showMessageDialog(this, "Menu berhasil diupdate!");
+            refreshTable();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Gagal update menu!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnEditActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -286,11 +417,15 @@ public class FormMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnReset;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnTambah;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblMenu;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

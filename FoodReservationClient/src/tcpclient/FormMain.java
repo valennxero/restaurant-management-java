@@ -22,6 +22,9 @@ public class FormMain extends javax.swing.JFrame {
 
         if (TCPClient.loggedRole.equals("customer")) {
             btnReservation.setVisible(true); //admin tidak butuh tombol reservasi
+            btnKelolaMeja.setVisible(false);
+        } else {
+            btnReservation.setVisible(false);
         }
     }
 
@@ -41,6 +44,8 @@ public class FormMain extends javax.swing.JFrame {
         btnReservation = new javax.swing.JButton();
         btnHistory = new javax.swing.JButton();
         btnLogOut = new javax.swing.JButton();
+        btnProfil = new javax.swing.JButton();
+        btnKelolaMeja = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,6 +83,20 @@ public class FormMain extends javax.swing.JFrame {
             }
         });
 
+        btnProfil.setText("Edit Profil");
+        btnProfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProfilActionPerformed(evt);
+            }
+        });
+
+        btnKelolaMeja.setText("Kelola Meja");
+        btnKelolaMeja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKelolaMejaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,22 +107,27 @@ public class FormMain extends javax.swing.JFrame {
                         .addGap(67, 67, 67)
                         .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(btnHistory))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnLogOut)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(lblRole, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(btnMenu)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(63, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnMenu)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnHistory)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnKelolaMeja)))
+                                .addGap(62, 62, 62))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblRole, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnProfil)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,14 +137,17 @@ public class FormMain extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(lblRole))
-                .addGap(41, 41, 41)
+                    .addComponent(lblRole)
+                    .addComponent(btnProfil))
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnMenu)
                     .addComponent(btnReservation))
-                .addGap(33, 33, 33)
-                .addComponent(btnHistory)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnHistory)
+                    .addComponent(btnKelolaMeja))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 146, Short.MAX_VALUE)
                 .addComponent(btnLogOut)
                 .addContainerGap())
         );
@@ -153,6 +180,16 @@ public class FormMain extends javax.swing.JFrame {
         this.dispose();
 
     }//GEN-LAST:event_btnLogOutActionPerformed
+
+    private void btnProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfilActionPerformed
+        // TODO add your handling code here:
+        new FormProfil().setVisible(true);
+    }//GEN-LAST:event_btnProfilActionPerformed
+
+    private void btnKelolaMejaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKelolaMejaActionPerformed
+        // TODO add your handling code here:
+        new FormMeja().setVisible(true);
+    }//GEN-LAST:event_btnKelolaMejaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,8 +228,10 @@ public class FormMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHistory;
+    private javax.swing.JButton btnKelolaMeja;
     private javax.swing.JButton btnLogOut;
     private javax.swing.JButton btnMenu;
+    private javax.swing.JButton btnProfil;
     private javax.swing.JButton btnReservation;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblRole;

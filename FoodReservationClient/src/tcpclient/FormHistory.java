@@ -4,17 +4,64 @@
  */
 package tcpclient;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Jevon
  */
 public class FormHistory extends javax.swing.JFrame {
 
+    private javax.swing.table.DefaultTableModel modelAsli;
+
     /**
      * Creates new form FormHistory
      */
     public FormHistory() {
         initComponents();
+        setTitle("Food Reservation - Riwayat Reservasi");
+        setLocationRelativeTo(null);
+        refreshHistory();
+        if (TCPClient.loggedRole.equals("customer")) {
+            btnConfirm.setVisible(false);
+        }
+        txtDariTgl.setText("2026-01-01");
+        txtSampaiTgl.setText(java.time.LocalDate.now().toString());
+
+    }
+
+    private void refreshHistory() {
+        DefaultTableModel model = (DefaultTableModel) tblHistory.getModel();
+        model.setRowCount(0);
+
+        String response;
+        if (TCPClient.loggedRole.equals("admin")) {
+            response = TCPClient.sendCommand("GET_ALL_RESERVATIONS");
+        } else {
+            response = TCPClient.sendCommand("GET_HISTORY~" + TCPClient.loggedUser);
+        }
+
+        if (response == null || response.contains("KOSONG")) {
+            return;
+        }
+
+        String[] parts = response.split("~");
+        for (int i = 1; i < parts.length; i++) {
+            String[] cols = parts[i].split("\\|");
+
+            if (TCPClient.loggedRole.equals("admin") && cols.length >= 7) {
+                // Format admin: id|username|tableName|date|time|guestCount|status (7 field)
+                // Buang index 1 (username) supaya jadi 6 kolom: id|meja|tgl|jam|tamu|status
+                Object[] rowData = {cols[0], cols[2], cols[3], cols[4], cols[5], cols[6]};
+                model.addRow(rowData);
+            } else if (cols.length >= 6) {
+                // Format customer: id|tableName|date|time|guestCount|status (6 field)
+                model.addRow(cols);
+            }
+        }
+        // Simpan salinan untuk filter
+        modelAsli = model;
     }
 
     /**
@@ -26,21 +73,295 @@ public class FormHistory extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblHistory = new javax.swing.JTable();
+        btnRefresh = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        btnDetail = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        btnConfirm = new javax.swing.JButton();
+        txtDariTgl = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtSampaiTgl = new javax.swing.JTextField();
+        btnFilter = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tblHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Meja", "Tanggal", "Jam", "Tamu", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblHistory);
+
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setText("Batalkan Reservasi");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        btnDetail.setText("Detail");
+        btnDetail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetailActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        btnConfirm.setText("Konfirmasi Pesanan");
+        btnConfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Dari tanggal : ");
+
+        jLabel2.setText("Sampai Tanggal : ");
+
+        btnFilter.setText("Filter");
+        btnFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterActionPerformed(evt);
+            }
+        });
+
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDetail)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCancel)
+                        .addGap(24, 24, 24)
+                        .addComponent(btnRefresh))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnConfirm)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtSampaiTgl))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtDariTgl, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnFilter)
+                            .addComponent(btnReset))
+                        .addGap(27, 27, 27)))
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRefresh)
+                    .addComponent(btnCancel)
+                    .addComponent(btnDetail)
+                    .addComponent(jButton1))
+                .addGap(18, 18, 18)
+                .addComponent(btnConfirm)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDariTgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(btnFilter))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtSampaiTgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReset))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        refreshHistory();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        // TODO add your handling code here:
+        int row = tblHistory.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih reservasi yang akan dibatalkan!");
+            return;
+        }
+
+        int statusCol = 5;  // selalu 5, karena tabel cuma 6 kolom
+
+        String status = tblHistory.getModel().getValueAt(row, statusCol).toString();
+        if (!status.equals("pending")) {
+            JOptionPane.showMessageDialog(this,
+                    "Hanya reservasi berstatus 'pending' yang bisa dibatalkan!");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Yakin ingin membatalkan reservasi ini?", "Konfirmasi",
+                JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        String id = tblHistory.getModel().getValueAt(row, 0).toString();
+        String response = TCPClient.sendCommand("CANCEL~" + id);
+
+        if (response != null && response.equals("SUCCESS")) {
+            JOptionPane.showMessageDialog(this, "Reservasi berhasil dibatalkan!");
+            refreshHistory();
+        } else {
+            JOptionPane.showMessageDialog(this, "Gagal membatalkan reservasi!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
+        // TODO add your handling code here:
+        int row = tblHistory.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih reservasi dulu!");
+            return;
+        }
+        String id = tblHistory.getModel().getValueAt(row, 0).toString();
+        new FormOrderDetail(Integer.parseInt(id)).setVisible(true);
+
+    }//GEN-LAST:event_btnDetailActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
+        int row = tblHistory.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih reservasi dulu!");
+            return;
+        }
+
+        int statusCol = 5;  // selalu 5, karena tabel sekarang cuma 6 kolom untuk admin & customer
+        String status = tblHistory.getModel().getValueAt(row, statusCol).toString();
+
+        if (!status.equals("pending")) {
+            JOptionPane.showMessageDialog(this,
+                    "Hanya reservasi berstatus 'pending' yang bisa dikonfirmasi!");
+            return;
+        }
+
+        String id = tblHistory.getModel().getValueAt(row, 0).toString();
+        String response = TCPClient.sendCommand("CONFIRM~" + id);
+
+        if (response != null && response.equals("SUCCESS")) {
+            JOptionPane.showMessageDialog(this, "Reservasi berhasil dikonfirmasi!");
+            refreshHistory();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Gagal konfirmasi reservasi!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnConfirmActionPerformed
+
+    private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
+        // TODO add your handling code here:
+        String dari = txtDariTgl.getText().trim();
+        String sampai = txtSampaiTgl.getText().trim();
+
+        if (dari.isEmpty() || sampai.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Isi tanggal awal dan tanggal akhir!");
+            return;
+        }
+
+        DefaultTableModel modelFilter = (DefaultTableModel) tblHistory.getModel();
+        modelFilter.setRowCount(0);
+
+        int tglCol = TCPClient.loggedRole.equals("admin") ? 3 : 2;
+
+        for (int i = 0; i < modelAsli.getRowCount(); i++) {
+            String tgl = modelAsli.getValueAt(i, tglCol).toString();
+            // Bandingkan string tanggal (format yyyy-MM-dd bisa dibandingkan langsung)
+            if (tgl.compareTo(dari) >= 0 && tgl.compareTo(sampai) <= 0) {
+                int colCount = modelAsli.getColumnCount();
+                Object[] rowData = new Object[colCount];
+                for (int j = 0; j < colCount; j++) {
+                    rowData[j] = modelAsli.getValueAt(i, j);
+                }
+                modelFilter.addRow(rowData);
+            }
+        }
+
+        if (modelFilter.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Tidak ada reservasi pada periode tersebut.");
+        }
+
+    }//GEN-LAST:event_btnFilterActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        txtDariTgl.setText("2026-01-01");
+        txtSampaiTgl.setText(java.time.LocalDate.now().toString());
+        refreshHistory();
+
+    }//GEN-LAST:event_btnResetActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +399,18 @@ public class FormHistory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnConfirm;
+    private javax.swing.JButton btnDetail;
+    private javax.swing.JButton btnFilter;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnReset;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblHistory;
+    private javax.swing.JTextField txtDariTgl;
+    private javax.swing.JTextField txtSampaiTgl;
     // End of variables declaration//GEN-END:variables
 }
